@@ -28,9 +28,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 // CORS — AllowCredentials is required for SignalR WebSocket negotiation
+var allowedOrigins = builder.Configuration["Cors:AllowedOrigins"]
+    ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+    ?? ["http://localhost:5173"];
+
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()));
