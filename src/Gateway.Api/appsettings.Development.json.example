@@ -20,6 +20,11 @@
         "Order": 3,
         "Match": { "Path": "/api/jobs/{jobId}/resume" }
       },
+      "jobs-hub": {
+        "ClusterId": "job-consumer-cluster",
+        "Order": 5,
+        "Match": { "Path": "/hubs/jobs/{**remainder}" }
+      },
       "jobs": {
         "ClusterId": "job-cluster",
         "Order": 10,
@@ -55,6 +60,11 @@
       "resume-cluster": {
         "Destinations": {
           "resume-service": { "Address": "http://localhost:5271/" }
+        }
+      },
+      "job-consumer-cluster": {
+        "Destinations": {
+          "job-service-consumer": { "Address": "http://localhost:5290/" }
         }
       }
     }
