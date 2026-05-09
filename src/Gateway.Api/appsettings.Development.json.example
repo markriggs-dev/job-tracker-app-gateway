@@ -1,0 +1,72 @@
+{
+  "Auth0": {
+    "Domain": "your-tenant.us.auth0.com",
+    "Audience": "https://your-api-identifier"
+  },
+  "ReverseProxy": {
+    "Routes": {
+      "contacts-via-job": {
+        "ClusterId": "contact-cluster",
+        "Order": 1,
+        "Match": { "Path": "/api/jobs/{jobId}/contacts/{**remainder}" }
+      },
+      "journal-via-job": {
+        "ClusterId": "journal-cluster",
+        "Order": 2,
+        "Match": { "Path": "/api/jobs/{jobId}/journal/{**remainder}" }
+      },
+      "resume-via-job": {
+        "ClusterId": "resume-cluster",
+        "Order": 3,
+        "Match": { "Path": "/api/jobs/{jobId}/resume" }
+      },
+      "jobs-hub": {
+        "ClusterId": "job-consumer-cluster",
+        "Order": 5,
+        "Match": { "Path": "/hubs/jobs/{**remainder}" }
+      },
+      "jobs": {
+        "ClusterId": "job-cluster",
+        "Order": 10,
+        "Match": { "Path": "/api/jobs/{**remainder}" }
+      },
+      "contacts": {
+        "ClusterId": "contact-cluster",
+        "Order": 11,
+        "Match": { "Path": "/api/contacts/{**remainder}" }
+      },
+      "resumes": {
+        "ClusterId": "resume-cluster",
+        "Order": 12,
+        "Match": { "Path": "/api/resumes/{**remainder}" }
+      }
+    },
+    "Clusters": {
+      "job-cluster": {
+        "Destinations": {
+          "job-service": { "Address": "http://localhost:5153/" }
+        }
+      },
+      "contact-cluster": {
+        "Destinations": {
+          "contact-service": { "Address": "http://localhost:5297/" }
+        }
+      },
+      "journal-cluster": {
+        "Destinations": {
+          "journal-service": { "Address": "http://localhost:5241/" }
+        }
+      },
+      "resume-cluster": {
+        "Destinations": {
+          "resume-service": { "Address": "http://localhost:5271/" }
+        }
+      },
+      "job-consumer-cluster": {
+        "Destinations": {
+          "job-service-consumer": { "Address": "http://localhost:5290/" }
+        }
+      }
+    }
+  }
+}
